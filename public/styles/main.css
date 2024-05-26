@@ -1,0 +1,45 @@
+body{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+
+}
+
+.main-heading{
+    color: hsl(200, 9%, 38%);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.data{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    text-align: justify;
+}
+
+.heading-city{
+    color: hsl(200, 9%, 38%);
+    display: block;
+    text-align: center;
+}
+.search{
+    display: flex;
+    justify-content: space-evenly;
+   background-color: rgb(207 244 251);
+}
+input{
+    border: none;
+    border-radius: 5px;
+    font-weight: 100;
+    
+}
+.bttn{
+    background-color: rgb(228, 136, 31);
+}
+
+p{
+    color: hsl(200, 9%, 38%);
+}
+.days{
+    display: flex;
+    flex-direction: column;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Checker</title>
+    <link rel="stylesheet" href="/styles/main.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body style="background-color:rgb(160, 241, 214)">
+    <h2 class="main-heading pb-2 ">Check weather using Open Weather API</h2>
+
+    <div class="search p-3">
+      <form action="/" method="POST">
+        <input name="city" placeholder="  weather in your city or country" />
+        <button
+          type="submit"
+          class="btn btn-secondary"
+          style="
+            --bs-btn-padding-y: 0.25rem;
+            --bs-btn-padding-x: 0.5rem;
+            --bs-btn-font-size: 1rem;
+          "
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+    <% const temp = (locals.data.temp) %> <% const roundedString = temp.toFixed(2) %>
+    <% const rounded = parseFloat(roundedString) %> <% const tempCelsius = rounded - 273.15 %> 
+    <% const roundedTemp = Math.round (tempCelsius) %> 
+    <% const realFeel = (locals.data.feels_like) %> 
+    <% const tempstr = realFeel.toFixed(2) %> 
+    <% const tempFloat = parseFloat(tempstr) %> 
+    <% const tempC = tempFloat - 273.15 %> <% const realFeelTemp = Math.round(tempC) %>
+
+
+    
+
+    <div class="container text-center pt-5">
+      
+      <div class="row">
+        <div class="col-12 data bg-info-subtle p-5 rounded">
+          <h3 class="heading-city col-3"><%= data.city %>, <%= data.country %></h3>
+          <div class="card1">
+            <p>☁ Sky: <%= data.weather %></p>
+            <p>🌡 Temperature: <%= roundedTemp %></p>
+          </div>
+          <div class="card2">
+            <p>🌡 Real Feel: <%= realFeelTemp %></p>
+            <p>🌡 Humidity: <%= data.humidity %>%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br />
+    <% 
+    function getWeatherDescription(code) {
+      switch (code) {
+        case 0:
+          return 'Clear sky';
+        case 1:
+          return 'Mainly clear'
+        case 2:
+          return 'Partly cloudy'
+        case 3:
+          return 'Overcast'
+
+      }
+    }
+    %>
+  <% 
+  function getPrecipitationDescription(code) {
+    switch (code) {
+      case 0:
+        return 'Clear sky';
+      case 1:
+        return 'Mainly clear'
+      case 2:
+        return 'Partly cloudy'
+      case 3:
+        return 'Overcast'
+      case 45: 
+        return 'Fog'
+      case 48: 
+        return 'Depositing Rime Fog'
+      case 51: 
+        return 'Drizzle: Light'
+      case 53: 
+        return 'Drizzle: Moderate'
+      case 55: 
+        return 'Drizzle: Dense '
+      case 56: 
+        return 'Freezing Drizzle: Light'
+      case 57: 
+        return 'Freezing Drizzle: Dense'
+      case 61: 
+        return 'Rain: Slight'
+      case 63: 
+        return 'Rain: Moderate'
+      case 65: 
+        return 'Rain: Heavy'
+      case 66: 
+        return 'Freezing Rain: Light'
+      case 67: 
+        return 'Freezing Rain: Heavy'
+      case 71: 
+        return 'Snowfall: Slight'
+      case 73: 
+        return 'Snowfall: Moderate'
+      case 75: 
+        return 'Snowfall: Heavy'
+      case 77: 
+        return 'Snow grains'
+      case 80: 
+        return 'Rain showers: Slight'
+      case 81: 
+        return 'Rain showers: Moderate'
+      case 82: 
+        return 'Rain showers: Violent'
+      case 85: 
+        return 'Snow Showers: Slight'
+      case 86: 
+        return 'Snow Showers: Heavy'
+      case 95: 
+        return 'Thunderstorm: Slight or Moderate'
+      case 96: 
+        return 'Thunderstorm: Slight Hail'
+      case 99: 
+        return 'Thunderstorm: Heavy Hail'
+
+    }
+  }
+  %>
+    <% 
+    function getDayOfWeek(dateString) {
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const date = new Date(dateString);
+      return daysOfWeek[date.getDay()];
+    }
+     %>
+    <div class="container rounded">
+      <h3 style="color: hsl(200, 9%, 38%);">Daily Forecast <%= data.city %>, <%= data.country %></h3>
+      <% for (let i = 0; i < data.forecast.weather_code.length; i++) { %>
+        <div class="row flex-row rounded justify">
+          <div class="col-2 bg-info-subtle p-3 text-center "><%= getDayOfWeek(data.forecast.time[i]) %></div>
+          <% if (data.forecast.temperature_2m_max === '0') { %>
+              <% data.forecast.temperature_2m_max = 'Clear Sky' %>
+          <% } %>
+          <div class="col-3 bg-info-subtle p-3 ">🌡  <%= data.forecast.temperature_2m_max[i] %>°C / 🌡 <%= data.forecast.temperature_2m_min[i] %>°C</div>
+          <div class="col-5 bg-info-subtle p-3 "> <%= getWeatherDescription(data.forecast.weather_code[i]) %></div>
+          <div class="col-2 bg-info-subtle p-3 "> <%= getPrecipitationDescription(data.forecast.precipitation_probability_max[i]) %></div>
+        </div>
+      <% } %>
+    </div>
+    
+
+    
+  </body>
+</html>
